@@ -9,14 +9,12 @@
 	</head>
 	<body>
 		<b><i>${status}</i></b><br>
-		<a href="addOrder?loadAddForm=true">New Order</a><br>
-		<a href="showOrder?getAllOrders=true">All Orders</a><br><br>
 		<!-- do for all coffees -->
 		<c:forEach var="order" items="${orders}">
-		<table>
+		<table style="width:25%">
 			<tr>
 				<td>Order:<b>${order.id}</b></td>
-				<td><a href="prepare?id=${order.id}&prepare=true">Prepare</a></td>
+				<td><a href="prepare?id=${order.id}&preparing=true">Prepare</a></td>
 				<td><a href="checkPayment?id=${order.id}&checkPay=true">Check Payment</a></td>
 				<td><a href="releaseOrder?id=${order.id}&release=true">Release</a><td>
 				

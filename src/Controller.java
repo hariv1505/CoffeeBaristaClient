@@ -3,7 +3,6 @@
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
-import java.util.Random;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,14 +18,14 @@ import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.sun.jersey.api.representation.Form;
 /**
  * Servlet implementation class Controller
  */
 @WebServlet(name="Controller",urlPatterns={"/","/home","/prepare"})
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private List<Order> orders;
+	
+	private static String HOST = "localhost";
        
 	ClientConfig config = new DefaultClientConfig();
 	Client client = Client.create(config);
@@ -48,16 +47,25 @@ public class Controller extends HttpServlet {
 		List<Order> ords = service.path("rest").path("orders").accept(
 				MediaType.APPLICATION_XML).header("Auth", "abc123").get(new GenericType<List<Order>>(){});
 		
-		if(request.getParameter("prepare") != null){
-			//set preparing to 1
+		if(request.getParameter("preparing") != null){
+			
+			Order o = service.path("rest").path("orders/"+request.getParameter("id")).accept(
+					MediaType.APPLICATION_XML).header("Auth", "abc123").get(Order.class);
+			
+			o.setStatus("1");
+			
+			service.path("rest").path("orders")
+			.path(o.getId()).accept(MediaType.APPLICATION_XML).header("Auth","abc123")
+			.put(ClientResponse.class, o);
 			response.sendRedirect("home?status=Marked%20Preparing");
 		}
 		else if(request.getParameter("checkPay") != null){
-			//check paid
-			//if(paid)
+			ClientResponse res = service.path("rest").path("payments/"+request.getParameter("id")).accept(
+					MediaType.APPLICATION_XML).header("Auth", "def456").get(ClientResponse.class);
+			if(res.getStatus() == 400)
+				response.sendRedirect("home?status=Not%20Paid%20Yet");
+			else
 				response.sendRedirect("home?status=Paid");
-			//else
-				response.sendRedirect("home?status=Not%20Paid");
 		}
 		else if(request.getParameter("release") != null){
 			//release process
@@ -79,8 +87,9 @@ public class Controller extends HttpServlet {
 	}
 	
 	private static URI getBaseURI() {
-		return UriBuilder.fromUri(
-				"http://localhost:8080/CoffeeService").build();
+		return UriBuilder
+				.fromUri("http://" + HOST + "/CoffeeService")
+				.build();
 	}
 
 }
