@@ -23,7 +23,8 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 @WebServlet(name="Controller",urlPatterns={"/","/home","/prepare"})
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private List<Order> orders;
+	//private List<Order> orders;
+	private static String HOST = "localhost";
        
 	ClientConfig config = new DefaultClientConfig();
 	Client client = Client.create(config);
@@ -76,8 +77,9 @@ public class Controller extends HttpServlet {
 	}
 	
 	private static URI getBaseURI() {
-		return UriBuilder.fromUri(
-				"http://localhost:8080/CoffeeService").build();
+		return UriBuilder
+				.fromUri("http://" + HOST + "/CoffeeService")
+				.build();
 	}
 
 }
