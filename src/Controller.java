@@ -23,7 +23,7 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 @WebServlet(name="Controller",urlPatterns={"/","/home","/prepare"})
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	//private List<Order> orders;
+	
 	private static String HOST = "localhost";
        
 	ClientConfig config = new DefaultClientConfig();
