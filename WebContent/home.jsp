@@ -8,7 +8,7 @@
 		<title>Barista - Home</title>
 	</head>
 	<body>
-		<b><i>${status}</i></b><br>
+		<b><i>${status} <b>${id}</b></i></b><br>
 		<!-- do for all coffees -->
 		<c:forEach var="order" items="${orders}">
 		<table style="width:25%">
